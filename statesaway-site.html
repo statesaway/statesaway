@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>STATES AWAY — Technical Garment Synergy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a0a;
+    --bg-alt: #111111;
+    --ink: #e8e6e2;
+    --ink-mute: #888583;
+    --ink-faint: #4a4845;
+    --line: #1f1d1a;
+    --accent: #c9a86a;
+  }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ── Top bar ──────────────────────────────────── */
+  .topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--line);
+    z-index: 50;
+    padding: 14px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .topbar .left { color: var(--ink-mute); }
+  .topbar .center { color: var(--ink); font-weight: 500; }
+  .topbar .right { color: var(--ink-mute); display: flex; gap: 24px; }
+  .topbar .right a { color: inherit; text-decoration: none; transition: color 0.3s; }
+  .topbar .right a:hover { color: var(--accent); }
+
+  /* ── Masthead ─────────────────────────────────── */
+  .masthead {
+    padding: 140px 32px 80px;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+  .masthead-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    max-width: 1400px;
+    margin: 0 auto;
+    align-items: end;
+  }
+  .masthead-title {
+    font-size: clamp(80px, 13vw, 200px);
+    line-height: 0.85;
+    font-weight: 300;
+    letter-spacing: -0.04em;
+    font-feature-settings: "ss01" 1;
+  }
+  .masthead-title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+  .masthead-meta {
+    padding-bottom: 18px;
+  }
+  .masthead-meta .tagline {
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--ink-mute);
+    font-style: italic;
+    margin-bottom: 28px;
+    max-width: 380px;
+  }
+  .masthead-meta .issue {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    line-height: 2;
+  }
+
+  /* ── Countdown ───────────────────────────────── */
+  .countdown-bar {
+    border-bottom: 1px solid var(--line);
+    padding: 24px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    background: var(--bg-alt);
+  }
+  .countdown-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .countdown-numbers {
+    display: flex;
+    gap: 32px;
+  }
+  .countdown-block {
+    text-align: center;
+  }
+  .countdown-block .num {
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1;
+    font-feature-settings: "tnum" 1;
+  }
+  .countdown-block .lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+  .countdown-route {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+  }
+  .countdown-route .arrow {
+    color: var(--accent);
+    margin: 0 12px;
+  }
+
+  /* ── Subscribe ───────────────────────────────── */
+  .subscribe {
+    padding: 80px 32px;
+    border-bottom: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    max-width: 1400px;
+    margin: 0 auto;
+    align-items: center;
+  }
+  .subscribe-headline {
+    font-size: clamp(36px, 4vw, 56px);
+    line-height: 1.05;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+  }
+  .subscribe-headline em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .subscribe-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .subscribe-form p {
+    font-size: 13px;
+    color: var(--ink-mute);
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+  .subscribe-input {
+    display: flex;
+    border-bottom: 1px solid var(--ink-mute);
+    padding-bottom: 12px;
+  }
+  .subscribe-input input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--ink);
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 300;
+    outline: none;
+    padding: 4px 0;
+  }
+  .subscribe-input input::placeholder {
+    color: var(--ink-faint);
+    font-style: italic;
+  }
+  .subscribe-input button {
+    background: transparent;
+    border: none;
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 4px 0 4px 16px;
+    transition: color 0.3s;
+  }
+  .subscribe-input button:hover { color: var(--accent); }
+
+  /* ── Section heads ───────────────────────────── */
+  .section-head {
+    padding: 60px 32px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid var(--line);
+    max-width: 1400px;
+    margin: 0 auto;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .section-title {
+    font-size: clamp(40px, 5vw, 72px);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    font-feature-settings: "ss01" 1;
+  }
+  .section-title em { font-style: italic; color: var(--accent); }
+  .section-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 4px;
+    transition: color 0.3s, border-color 0.3s;
+  }
+  .section-link:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* ── Vlog episodes ───────────────────────────── */
+  .episodes {
+    padding: 40px 32px 80px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .episode {
+    display: grid;
+    grid-template-columns: 80px 1fr 280px 180px;
+    gap: 32px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: center;
+    cursor: pointer;
+    transition: padding 0.4s ease;
+  }
+  .episode:hover { padding-left: 12px; }
+  .episode:hover .ep-title { color: var(--accent); }
+  .episode-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--ink-faint);
+  }
+  .ep-title {
+    font-size: 28px;
+    font-weight: 300;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    transition: color 0.4s;
+  }
+  .ep-title em { font-style: italic; }
+  .ep-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    line-height: 1.8;
+  }
+  .ep-status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    text-align: right;
+    padding-left: 24px;
+    border-left: 1px solid var(--line);
+  }
+  .ep-status.live { color: var(--accent); }
+  .ep-status.live::before {
+    content: '●';
+    margin-right: 6px;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  /* ── Flatlay archive grid ────────────────────── */
+  .archive {
+    padding: 40px 32px 80px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .archive-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    background: var(--line);
+  }
+  .archive-item {
+    background: var(--bg-alt);
+    aspect-ratio: 4/5;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-end;
+    padding: 20px;
+    transition: background 0.4s;
+  }
+  .archive-item:hover { background: #1a1815; }
+  .archive-item:hover .archive-num { color: var(--accent); }
+  .archive-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-faint);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    opacity: 0.5;
+  }
+  .archive-meta {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .archive-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--ink-mute);
+    transition: color 0.3s;
+  }
+  .archive-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--ink-faint);
+  }
+
+  /* ── Manifesto ──────────────────────────────── */
+  .manifesto {
+    padding: 120px 32px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-alt);
+    position: relative;
+  }
+  .manifesto-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .manifesto-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .manifesto-text {
+    font-size: clamp(28px, 3.5vw, 44px);
+    line-height: 1.35;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+  }
+  .manifesto-text em { font-style: italic; color: var(--accent); }
+  .manifesto-sig {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-top: 40px;
+  }
+
+  /* ── Footer ─────────────────────────────────── */
+  footer {
+    padding: 60px 32px 32px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px;
+    padding-bottom: 60px;
+    border-bottom: 1px solid var(--line);
+  }
+  .footer-mark {
+    font-size: 48px;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 0.9;
+  }
+  .footer-mark em { font-style: italic; color: var(--accent); }
+  .footer-tagline {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-top: 12px;
+  }
+  .footer-col h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    font-weight: 400;
+    margin-bottom: 16px;
+  }
+  .footer-col a {
+    display: block;
+    color: var(--ink-mute);
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 2;
+    transition: color 0.3s;
+  }
+  .footer-col a:hover { color: var(--accent); }
+  .footer-bottom {
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+
+  /* ── Responsive ─────────────────────────────── */
+  @media (max-width: 900px) {
+    .topbar { padding: 12px 20px; font-size: 9px; }
+    .topbar .right { gap: 16px; }
+    .masthead { padding: 100px 20px 60px; }
+    .masthead-grid { grid-template-columns: 1fr; gap: 32px; }
+    .countdown-bar { padding: 20px; gap: 16px; }
+    .countdown-numbers { gap: 20px; }
+    .countdown-block .num { font-size: 24px; }
+    .subscribe { padding: 60px 20px; grid-template-columns: 1fr; gap: 32px; }
+    .section-head { padding: 50px 20px 20px; }
+    .episodes, .archive, footer { padding-left: 20px; padding-right: 20px; }
+    .episode { grid-template-columns: 1fr; gap: 12px; padding: 24px 0; }
+    .ep-status { text-align: left; padding-left: 0; border-left: none; }
+    .archive-grid { grid-template-columns: repeat(2, 1fr); }
+    .manifesto { padding: 80px 20px; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .footer-mark { font-size: 36px; }
+  }
+
+  /* ── Reveal animations ──────────────────────── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="left">VOL. I — ISSUE 001</div>
+    <div class="center">STATES AWAY</div>
+    <div class="right">
+      <a href="#journal">Journal</a>
+      <a href="#archive">Archive</a>
+      <a href="#manifesto">Manifesto</a>
+    </div>
+  </div>
+
+  <!-- Masthead -->
+  <header class="masthead">
+    <div class="masthead-grid">
+      <h1 class="masthead-title reveal">States<br><em>Away</em>.</h1>
+      <div class="masthead-meta reveal">
+        <p class="tagline">A documented pursuit. Notes on technical garment synergy from a man states away from where he wants to be.</p>
+        <div class="issue">
+          <div>EST. CHARLOTTE, NC</div>
+          <div>FOUNDED 2026</div>
+          <div>ON ROUTE — NEW YORK CITY</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Countdown -->
+  <div class="countdown-bar">
+    <div class="countdown-label">Arrival</div>
+    <div class="countdown-numbers" id="countdown">
+      <div class="countdown-block"><div class="num" id="cd-days">—</div><div class="lbl">Days</div></div>
+      <div class="countdown-block"><div class="num" id="cd-hours">—</div><div class="lbl">Hours</div></div>
+      <div class="countdown-block"><div class="num" id="cd-mins">—</div><div class="lbl">Minutes</div></div>
+      <div class="countdown-block"><div class="num" id="cd-secs">—</div><div class="lbl">Seconds</div></div>
+    </div>
+    <div class="countdown-route">Charlotte <span class="arrow">→</span> New York</div>
+  </div>
+
+  <!-- Subscribe -->
+  <section class="subscribe">
+    <h2 class="subscribe-headline reveal">A quiet letter, <em>occasionally sent</em>.</h2>
+    <div class="subscribe-form reveal">
+      <p>Notes on technical garments, the journey, and what's coming. Sent only when there's something to say. No noise.</p>
+      <div class="subscribe-input">
+        <input type="email" placeholder="your@email" id="sub-email">
+        <button onclick="handleSubscribe()">Subscribe →</button>
+      </div>
+      <p style="font-size: 11px; color: var(--ink-faint);" id="sub-msg"></p>
+    </div>
+  </section>
+
+  <!-- Journal / Vlog episodes -->
+  <div id="journal">
+    <div class="section-head">
+      <span class="section-num">§ 01 — The Journal</span>
+      <h2 class="section-title">Field <em>Notes</em></h2>
+      <a href="#" class="section-link">All Episodes →</a>
+    </div>
+    <div class="episodes">
+      <div class="episode reveal">
+        <div class="episode-num">EP / 001</div>
+        <div class="ep-title">Beginning <em>states away</em>.</div>
+        <div class="ep-meta">
+          <div>10 min — Charlotte</div>
+          <div>Pocket 4P · Day One</div>
+        </div>
+        <div class="ep-status">Coming Soon</div>
+      </div>
+      <div class="episode reveal">
+        <div class="episode-num">EP / 002</div>
+        <div class="ep-title">The <em>kit</em>, examined.</div>
+        <div class="ep-meta">
+          <div>10 min — Workshop</div>
+          <div>Satisfy · UVU · Adidas</div>
+        </div>
+        <div class="ep-status">Scheduled</div>
+      </div>
+      <div class="episode reveal">
+        <div class="episode-num">EP / 003</div>
+        <div class="ep-title">First trip <em>north</em>.</div>
+        <div class="ep-meta">
+          <div>10 min — New York</div>
+          <div>Scouting · Field</div>
+        </div>
+        <div class="ep-status">Scheduled</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Flatlay Archive -->
+  <div id="archive">
+    <div class="section-head">
+      <span class="section-num">§ 02 — The Archive</span>
+      <h2 class="section-title">Flatlay <em>Index</em></h2>
+      <a href="#" class="section-link">Full Archive →</a>
+    </div>
+    <div class="archive">
+      <div class="archive-grid">
+        <div class="archive-item reveal">
+          <div class="archive-placeholder">N° 010</div>
+          <div class="archive-meta"><span class="archive-num">N° 010</span><span class="archive-date">05.20.26</span></div>
+        </div>
+        <div class="archive-item reveal">
+          <div class="archive-placeholder">N° 009</div>
+          <div class="archive-meta"><span class="archive-num">N° 009</span><span class="archive-date">05.13.26</span></div>
+        </div>
+        <div class="archive-item reveal">
+          <div class="archive-placeholder">N° 008</div>
+          <div class="archive-meta"><span class="archive-num">N° 008</span><span class="archive-date">05.06.26</span></div>
+        </div>
+        <div class="archive-item reveal">
+          <div class="archive-placeholder">N° 007</div>
+          <div class="archive-meta"><span class="archive-num">N° 007</span><span class="archive-date">04.29.26</span></div>
+        </div>
+        <div class="archive-item reveal">
+          <div class="archive-placeholder">N° 006</div>
+          <div class="archive-meta"><span class="archive-num">N° 006</span><span class="archive-date">04.22.26</span></div>
+        </div>
+        <div class="archive-item reveal">
+          <div class="archive-placeholder">N° 005</div>
+          <div class="archive-meta"><span class="archive-num">N° 005</span><span class="archive-date">04.15.26</span></div>
+        </div>
+        <div class="archive-item reveal">
+          <div class="archive-placeholder">N° 004</div>
+          <div class="archive-meta"><span class="archive-num">N° 004</span><span class="archive-date">04.08.26</span></div>
+        </div>
+        <div class="archive-item reveal">
+          <div class="archive-placeholder">N° 003</div>
+          <div class="archive-meta"><span class="archive-num">N° 003</span><span class="archive-date">04.01.26</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Manifesto -->
+  <section class="manifesto" id="manifesto">
+    <div class="manifesto-inner">
+      <div class="manifesto-label reveal">§ 03 — A Note From the Editor</div>
+      <p class="manifesto-text reveal">
+        States Away is the documented pursuit of <em>technical garment synergy</em> — a study of what we wear when we move, why those choices matter, and the slow construction of a life still <em>states away</em> from where it's meant to be.
+      </p>
+      <div class="manifesto-sig reveal">— THE EDITOR · CHARLOTTE, 2026</div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-mark">States <em>Away</em>.</div>
+        <div class="footer-tagline">Technical Garment Synergy</div>
+      </div>
+      <div class="footer-col">
+        <h4>Journal</h4>
+        <a href="#">Field Notes</a>
+        <a href="#">Episodes</a>
+        <a href="#">Letters</a>
+      </div>
+      <div class="footer-col">
+        <h4>Archive</h4>
+        <a href="#">Flatlay Index</a>
+        <a href="#">Gear Notes</a>
+        <a href="#">Brand Studies</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="#">Instagram</a>
+        <a href="#">Inquiries</a>
+        <a href="#">Press</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 STATES AWAY · ALL RIGHTS RESERVED</span>
+      <span>CHARLOTTE → NEW YORK · APRIL 2027</span>
+    </div>
+  </footer>
+
+<script>
+  // Countdown to April 1, 2027
+  const target = new Date('2027-04-01T00:00:00').getTime();
+  function tick() {
+    const now = Date.now();
+    const diff = target - now;
+    if (diff < 0) {
+      ['cd-days','cd-hours','cd-mins','cd-secs'].forEach(id => document.getElementById(id).textContent = '00');
+      return;
+    }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('cd-days').textContent = String(d).padStart(3,'0');
+    document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
+    document.getElementById('cd-mins').textContent = String(m).padStart(2,'0');
+    document.getElementById('cd-secs').textContent = String(s).padStart(2,'0');
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  // Subscribe handler
+  function handleSubscribe() {
+    const email = document.getElementById('sub-email').value;
+    const msg = document.getElementById('sub-msg');
+    if (!email || !email.includes('@')) {
+      msg.textContent = 'Enter a valid email to continue.';
+      msg.style.color = 'var(--ink-mute)';
+      return;
+    }
+    msg.textContent = 'You\'re on the list. The next letter will find you.';
+    msg.style.color = 'var(--accent)';
+    document.getElementById('sub-email').value = '';
+  }
+
+  // Reveal on scroll
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
