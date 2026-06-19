@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>N° 007 — States Away</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --white: #ffffff;
+    --off-white: #f7f6f4;
+    --ink: #111111;
+    --ink-mute: #888580;
+    --ink-faint: #c8c5c0;
+    --border: #e8e6e2;
+  }
+
+  html, body {
+    background: var(--white);
+    color: var(--ink);
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 300;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .nav-back {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-back:hover { color: var(--ink); }
+
+  .detail-wrap {
+    display: grid;
+    grid-template-columns: 55% 45%;
+    min-height: 100vh;
+    padding-top: 61px;
+  }
+
+  .detail-photo {
+    position: sticky;
+    top: 61px;
+    height: calc(100vh - 61px);
+    background: var(--off-white);
+    overflow: hidden;
+  }
+  .detail-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .detail-content {
+    padding: 56px 52px 80px;
+    border-left: 1px solid var(--border);
+  }
+
+  .detail-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    display: block;
+    margin-bottom: 20px;
+  }
+  .detail-number {
+    font-size: clamp(52px, 5vw, 76px);
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+    margin-bottom: 16px;
+  }
+  .detail-number em { font-style: italic; }
+  .detail-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    display: block;
+    padding-bottom: 36px;
+    margin-bottom: 36px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .detail-section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    display: block;
+    margin-bottom: 16px;
+  }
+  .detail-body {
+    font-size: 16px;
+    line-height: 1.8;
+    font-weight: 300;
+    color: var(--ink);
+    margin-bottom: 48px;
+  }
+  .detail-body p + p { margin-top: 18px; }
+  .detail-body em { font-style: italic; }
+
+  .gear-block {
+    border-top: 1px solid var(--border);
+    padding-top: 36px;
+    margin-bottom: 48px;
+  }
+  .gear-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .gear-name {
+    font-size: 15px;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+  }
+  .gear-name em { font-style: italic; }
+  .gear-brand {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .page-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 36px;
+    border-top: 1px solid var(--border);
+  }
+  .page-nav-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .page-nav-link:hover { color: var(--ink); }
+  .page-nav-all {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .page-nav-all:hover { color: var(--ink); }
+
+  @media (max-width: 860px) {
+    nav { padding: 16px 20px; }
+    .detail-wrap { grid-template-columns: 1fr; padding-top: 57px; }
+    .detail-photo { position: relative; top: 0; height: 80vw; }
+    .detail-content { padding: 40px 20px 60px; border-left: none; border-top: 1px solid var(--border); }
+  }
+</style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">States Away</a>
+    <a href="index.html" class="nav-back">← Back to Index</a>
+  </nav>
+
+  <div class="detail-wrap">
+
+    <div class="detail-photo">
+      <img src="images/flatlay-007.jpg" alt="Flatlay N° 007">
+    </div>
+
+    <div class="detail-content">
+
+      <span class="detail-eyebrow">Flatlay Index · States Away</span>
+      <h1 class="detail-number">N° <em>007</em></h1>
+      <span class="detail-date">05.06.26 — Charlotte, NC</span>
+
+      <!-- ✏️ YOUR WRITE-UP -->
+      <span class="detail-section-label">The Notes</span>
+      <div class="detail-body">
+        <p>Write your editorial notes here. Talk about the intention behind this outfit, the context, the conditions. What were you doing, where were you going, what were you trying to solve for?</p>
+        <p>Get into the <em>specifics</em> — that's what makes this worth reading. How the pieces layer, what works, what you'd change, what surprised you.</p>
+      </div>
+
+      <!-- ✏️ YOUR GEAR LIST -->
+      <div class="gear-block">
+        <span class="detail-section-label">The Kit</span>
+        <div class="gear-item">
+          <span class="gear-name"><em>Piece name here</em></span>
+          <span class="gear-brand">Brand</span>
+        </div>
+        <div class="gear-item">
+          <span class="gear-name"><em>Piece name here</em></span>
+          <span class="gear-brand">Brand</span>
+        </div>
+        <div class="gear-item">
+          <span class="gear-name"><em>Piece name here</em></span>
+          <span class="gear-brand">Brand</span>
+        </div>
+        <div class="gear-item">
+          <span class="gear-name"><em>Piece name here</em></span>
+          <span class="gear-brand">Brand</span>
+        </div>
+        <div class="gear-item">
+          <span class="gear-name"><em>Piece name here</em></span>
+          <span class="gear-brand">Brand</span>
+        </div>
+      </div>
+
+      <div class="page-nav">
+        <a href="flatlay-006.html" class="page-nav-link">← N° 006</a>
+        <a href="index.html" class="page-nav-all">All Flatlays</a>
+        <a href="flatlay-008.html" class="page-nav-link">N° 008 →</a>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
