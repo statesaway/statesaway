@@ -33,7 +33,7 @@
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
-    z-index: 100;
+    z-index: 200;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -44,20 +44,77 @@
   }
   .nav-links {
     display: flex;
-    gap: 24px;
+    gap: 36px;
     list-style: none;
   }
   .nav-links a {
     font-family: 'Michroma', sans-serif;
-    font-size: 9px;
-    letter-spacing: 0.15em;
+    font-size: 10px;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--ink-mute);
     text-decoration: none;
     transition: color 0.2s;
-    white-space: nowrap;
   }
   .nav-links a:hover { color: var(--ink); }
+
+  /* ── Hamburger button ── */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    z-index: 300;
+  }
+  .hamburger span {
+    display: block;
+    width: 100%;
+    height: 1.5px;
+    background: var(--ink);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform-origin: center;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  /* ── Mobile dropdown menu ── */
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 150;
+    background: rgba(255,255,255,0.98);
+    backdrop-filter: blur(12px);
+    padding: 100px 32px 48px;
+    border-bottom: 1px solid var(--border);
+    flex-direction: column;
+    gap: 0;
+    transform: translateY(-100%);
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .mobile-menu.open {
+    transform: translateY(0);
+  }
+  .mobile-menu a {
+    font-family: 'Michroma', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+    transition: color 0.2s;
+  }
+  .mobile-menu a:last-child { border-bottom: none; }
+  .mobile-menu a:hover { color: var(--ink-mute); }
 
   /* ── Hero ── */
   .hero {
@@ -128,7 +185,7 @@
 
   /* ── Intro ── */
   .intro {
-    padding: 60px 24px;
+    padding: 80px 40px;
     max-width: 900px;
     margin: 0 auto;
     text-align: center;
@@ -136,10 +193,9 @@
   }
   .intro-text {
     font-size: clamp(14px, 2.5vw, 18px);
-    line-height: 1.6;
+    line-height: 1.7;
     font-weight: 500;
     font-family: 'Michroma', sans-serif;
-    letter-spacing: 0;
   }
   .intro-text em { font-style: italic; }
   .intro-meta {
@@ -159,7 +215,7 @@
 
   /* ── Archive section ── */
   .index-section {
-    padding: 48px 24px;
+    padding: 60px 40px;
     max-width: 1400px;
     margin: 0 auto;
   }
@@ -244,10 +300,8 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background 0.2s;
     z-index: 10;
   }
-  .carousel-btn:hover { background: white; }
   .carousel-btn svg { width: 16px; height: 16px; stroke: var(--ink); fill: none; stroke-width: 2; }
   .carousel-prev { left: 12px; }
   .carousel-next { right: 12px; }
@@ -266,22 +320,15 @@
     transition: background 0.2s, transform 0.2s;
     border: none;
   }
-  .carousel-dot.active {
-    background: var(--ink);
-    transform: scale(1.3);
-  }
+  .carousel-dot.active { background: var(--ink); transform: scale(1.3); }
 
   /* ── Journal ── */
   .journal-section {
-    padding: 48px 0;
+    padding: 60px 0;
     border-top: 1px solid var(--border);
     background: var(--off-white);
   }
-  .journal-inner {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
+  .journal-inner { max-width: 1400px; margin: 0 auto; padding: 0 40px; }
   .journal-header {
     margin-bottom: 32px;
     padding-bottom: 16px;
@@ -296,10 +343,11 @@
   }
   .episode-list { display: flex; flex-direction: column; }
   .episode {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 20px 0;
+    display: grid;
+    grid-template-columns: 80px 1fr auto auto;
+    gap: 24px;
+    align-items: center;
+    padding: 24px 0;
     border-bottom: 1px solid var(--border);
   }
   .ep-num {
@@ -310,17 +358,11 @@
     text-transform: uppercase;
   }
   .ep-title {
-    font-size: clamp(15px, 2vw, 20px);
+    font-size: clamp(14px, 2vw, 20px);
     font-weight: 300;
     font-family: 'Michroma', sans-serif;
   }
   .ep-title em { font-style: italic; }
-  .ep-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-  }
   .ep-meta {
     font-family: 'Michroma', sans-serif;
     font-size: 8px;
@@ -340,7 +382,7 @@
 
   /* ── Subscribe ── */
   .subscribe-section {
-    padding: 60px 24px;
+    padding: 80px 24px;
     border-top: 1px solid var(--border);
     max-width: 700px;
     margin: 0 auto;
@@ -377,7 +419,6 @@
     outline: none;
     font-family: 'Michroma', sans-serif;
     font-size: 10px;
-    letter-spacing: 0.05em;
     background: transparent;
     color: var(--ink);
     min-width: 0;
@@ -407,14 +448,13 @@
   /* ── Footer ── */
   .footer-grid {
     border-top: 1px solid var(--border);
-    padding: 36px 24px;
+    padding: 40px 40px;
     max-width: 1400px;
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
-    gap: 32px;
+    gap: 40px;
   }
-  .footer-col { min-width: 100px; }
   .footer-col-label {
     font-family: 'Michroma', sans-serif;
     font-size: 8px;
@@ -437,18 +477,45 @@
   .footer-col a:hover { color: var(--ink); }
   .footer-bottom {
     border-top: 1px solid var(--border);
-    padding: 16px 24px;
-    max-width: 1400px;
-    margin: 0 auto;
+    padding: 16px 40px;
     font-family: 'Michroma', sans-serif;
     font-size: 8px;
     letter-spacing: 0.15em;
     color: var(--ink-faint);
     text-transform: uppercase;
   }
+
+  /* ── Mobile ── */
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .mobile-menu { display: flex; }
+
+    .intro { padding: 60px 20px; }
+    .index-section { padding: 40px 20px; }
+    .journal-inner { padding: 0 20px; }
+    .journal-section { padding: 40px 0; }
+
+    .episode {
+      grid-template-columns: 1fr;
+      gap: 6px;
+      padding: 20px 0;
+    }
+    .ep-status { text-align: left; white-space: normal; }
+
+    .footer-grid { padding: 32px 20px; gap: 28px; }
+    .footer-bottom { padding: 16px 20px; }
+  }
 </style>
 </head>
 <body>
+
+  <!-- Mobile dropdown menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#index" onclick="closeMenu()">Archive</a>
+    <a href="#journal" onclick="closeMenu()">Journal</a>
+    <a href="#subscribe" onclick="closeMenu()">Letters</a>
+  </div>
 
   <nav>
     <a href="index.html"><img src="logoheader.png" alt="States Away" style="height: 24px; display: block;"></a>
@@ -457,6 +524,11 @@
       <li><a href="#journal">Journal</a></li>
       <li><a href="#subscribe">Letters</a></li>
     </ul>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </nav>
 
   <!-- Hero -->
@@ -493,7 +565,6 @@
       <button class="carousel-btn carousel-prev" onclick="moveCarousel(-1)" aria-label="Previous">
         <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
-
       <div class="carousel-track" id="carouselTrack">
         <div class="carousel-slide">
           <img src="images/flatlay-012.jpg" alt="Flatlay N° 012">
@@ -544,12 +615,10 @@
           <div class="carousel-caption"><span class="carousel-num">N° 001</span></div>
         </div>
       </div>
-
       <button class="carousel-btn carousel-next" onclick="moveCarousel(1)" aria-label="Next">
         <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
     </div>
-
     <div class="carousel-dots" id="carouselDots"></div>
   </section>
 
@@ -564,26 +633,20 @@
         <div class="episode">
           <span class="ep-num">EP / 001</span>
           <span class="ep-title"><em>States Away,</em> The Beginning</span>
-          <div class="ep-row">
-            <div class="ep-meta"><div>10 min — Charlotte</div><div>Concept · Vlogs</div></div>
-            <span class="ep-status">Coming Soon</span>
-          </div>
+          <div class="ep-meta"><div>10 min — Charlotte</div><div>Concept · Vlogs</div></div>
+          <span class="ep-status">Coming Soon</span>
         </div>
         <div class="episode">
           <span class="ep-num">EP / 002</span>
           <span class="ep-title"><em>New York</em></span>
-          <div class="ep-row">
-            <div class="ep-meta"><div>10 min — New York</div><div>Work · Life Update</div></div>
-            <span class="ep-status">Coming Soon</span>
-          </div>
+          <div class="ep-meta"><div>10 min — New York</div><div>Work · Life Update</div></div>
+          <span class="ep-status">Coming Soon</span>
         </div>
         <div class="episode">
           <span class="ep-num">EP / 003</span>
           <span class="ep-title"><em>Copenhagen Marathon</em></span>
-          <div class="ep-row">
-            <div class="ep-meta"><div>10 min — Copenhagen</div><div>Race · Vacation</div></div>
-            <span class="ep-status">Coming Soon</span>
-          </div>
+          <div class="ep-meta"><div>10 min — Copenhagen</div><div>Race · Vacation</div></div>
+          <span class="ep-status">Coming Soon</span>
         </div>
       </div>
     </div>
@@ -624,6 +687,23 @@
   </footer>
 
 <script>
+  // ── Hamburger ──
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  function toggleMenu() {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  }
+
+  function closeMenu() {
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ── Carousel ──
   let current = 0;
   const track = document.getElementById('carouselTrack');
   const slides = track.querySelectorAll('.carousel-slide');
@@ -665,6 +745,7 @@
   });
   track.addEventListener('mouseleave', () => isDragging = false);
 
+  // ── Subscribe ──
   function handleSubscribe() {
     const email = document.getElementById('sub-email').value;
     const msg = document.getElementById('sub-msg');
